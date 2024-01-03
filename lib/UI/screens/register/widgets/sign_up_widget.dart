@@ -45,8 +45,8 @@ class _SignUpFormState extends State<SignUpForm> {
               scuX: false,
               readOnly: false,
               validator: (vl) {
-              if (!vl!.isValidName) return 'Enter valid firstname';
-              return null;
+                if (vl!.isEmpty) return 'Enter valid firstname';
+                return null;
               },
             ),
             CustomTextFeild(
@@ -55,8 +55,8 @@ class _SignUpFormState extends State<SignUpForm> {
                 scuX: false,
                 readOnly: false,
                 validator: (vl) {
-                if (!vl!.isValidName) return 'Enter valid lastname';
-                return null;
+                  if (vl!.isEmpty) return 'Enter valid lastname';
+                  return null;
                 }),
             CustomTextFeild(
                 controller: username,
@@ -64,8 +64,8 @@ class _SignUpFormState extends State<SignUpForm> {
                 scuX: false,
                 readOnly: false,
                 validator: (vl) {
-                 if (!vl!.isValidEmail) return 'Enter valid username';
-                 return null;
+                  if (vl!.isEmpty) return 'Enter valid username';
+                  return null;
                 }),
             CustomTextFeild(
                 controller: email,
@@ -73,8 +73,8 @@ class _SignUpFormState extends State<SignUpForm> {
                 scuX: false,
                 readOnly: false,
                 validator: (vl) {
-                 if (!vl!.isValidEmail) return 'Enter valid email';
-                 return null;
+                  if (vl!.isEmpty) return 'Enter valid email';
+                  return null;
                 }),
             CustomTextFeild(
                 controller: password,
@@ -82,8 +82,8 @@ class _SignUpFormState extends State<SignUpForm> {
                 scuX: scux,
                 readOnly: false,
                 validator: (vl) {
-                 if (!vl!.isValidPassword) return 'Enter valid password';
-                 return null;
+                  if (vl!.isEmpty) return 'Enter valid password';
+                  return null;
                 }),
             Container(
               padding: const EdgeInsets.only(right: 25, left: 25),
@@ -104,9 +104,17 @@ class _SignUpFormState extends State<SignUpForm> {
                 ),
                 onPressed: () {
                   keyForm.currentState!.validate();
-                  ToastShowWidget.showToast(context , Colors.red,"Check Validations Form", "Show Error Bro ☺");
+                  ToastShowWidget.showToast(context, Colors.red,
+                      "Check Validations Form", "Show Error Bro ☺");
                   // if (keyForm.currentState!.validate()) {
-                  //   signUp(firstName.text, lastName.text, username.text, email.text, password.text);
+                  signUp(firstName.text, lastName.text, username.text,
+                      email.text, password.text);
+                  ToastShowWidget.showToast(context, Colors.greenAccent,
+                      "Success Created Account", "Goood Work Bro ☺");
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (builder) => const SignINScreen()));
                   // }
                 },
                 child: const Text('Sign up'),
@@ -153,39 +161,10 @@ class _SignUpFormState extends State<SignUpForm> {
           .updateProfile(displayName: "$firstName $lastName");
       // You can also send a verification email if desired
       await userCredential.user!.sendEmailVerification();
-      ToastShowWidget.showToast(context , Colors.greenAccent, "Success Created Account", "Goood Work Bro ☺");
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (builder) => const SignINScreen()));
     } catch (e) {
       print(e);
     }
   }
 
-  Future<void> googleSignUp() async {
-    try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await GoogleSignIn().signIn();
-
-      if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleSignInAuthentication.accessToken,
-          idToken: googleSignInAuthentication.idToken,
-        );
-
-        // Sign in to Firebase with Google credentials
-        await FirebaseAuth.instance.signInWithCredential(credential);
-
-        // Navigate to the desired screen after successful sign-in
-        // For example:
-        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-      } else {
-        // Google Sign-In was canceled
-      }
-    } catch (e) {
-      // Handle the error
-      print("Google Sign-In Error: $e");
-    }
-  }
+  
 }
