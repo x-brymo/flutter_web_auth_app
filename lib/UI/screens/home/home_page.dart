@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
       //    preferredSize: Size.fromHeight(80),
       //   child: AppBarHomeWidget()),
       body: ListView(
-        children: const [
+        children:  [
           BodyWidgetHome(),
 //         CustomCarousel(
 //   items: [
